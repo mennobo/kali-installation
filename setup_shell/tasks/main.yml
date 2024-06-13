@@ -55,6 +55,12 @@
     chdir: '{{ ansible_env.HOME }}/.dotfiles'
   become: false
 
+- name: Copy config.zsh
+  copy: 
+    src: config.zsh
+    dest: "/home/kali/.dotfiles/zsh/config.zsh"
+  become: false
+
 - name: Copy .tmux.config
   copy: 
     src: .tmux.conf
