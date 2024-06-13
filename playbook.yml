@@ -1,0 +1,12 @@
+---
+# - hosts: localhost
+#   become: yes
+#   roles:
+#     - role: setup_kali
+
+- hosts: localhost
+  remote_user: kali
+  roles:
+    - role: setup_shell
+
+   

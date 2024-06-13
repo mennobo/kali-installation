@@ -1,7 +1,4 @@
 ---
-- name: Install gotator
-  shell: go install github.com/Josue87/gotator@latest
-
 - name: Install ffuf
   apt:
     name: ffuf
@@ -15,9 +12,9 @@
 
 - name: Copy files to destination
   ansible.builtin.copy:
-    src: '/tmp/sqli/main/'
+    src: 'sqli_wordlist.txt'
     dest: '/usr/share/wfuzz/wordlist/Injections/'
-    remote_src: yes
+    remote_src: no
 
 - name: Install seclists and python3-venv
   ansible.builtin.apt:

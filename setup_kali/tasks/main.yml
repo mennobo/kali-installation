@@ -14,16 +14,15 @@
 - name: Execute a task file
   include_tasks: "{{ item }}.yml"
   loop:
-    - setup_firefox
     - setup_vscode
     - setup_tools
 
 - name: Set permissions for SSH folder
   ansible.builtin.file:
-    path: ~/.ssh
+    path: /home/kali/.ssh
     mode: '0700'
 
 - name: Set permissions for home folder
   ansible.builtin.file:
-    path: ~
+    path: /home/kali
     mode: '0755'
