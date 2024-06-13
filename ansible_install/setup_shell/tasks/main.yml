@@ -1,0 +1,66 @@
+---
+- name: Update apt-get
+  ansible.builtin.apt:
+    update_cache: yes
+    cache_valid_time: 3600
+
+- name: Install packages
+  ansible.builtin.apt:
+    name: "{{ packages }}"
+  vars:
+    packages:
+    - zsh
+    - git
+    - curl
+    - tmux
+
+- name: Change shell to zsh
+  ansible.builtin.shell:
+    cmd: chsh -s $(which zsh)
+
+- name: Clone the repository
+  ansible.builtin.git:
+    repo: 'https://github.com/caarlos0/dotfiles.git'
+    dest: '~/.dotfiles'
+    
+- name: Run the bootstrap script
+  ansible.builtin.command:
+    cmd: ./script/bootstrap
+    chdir: '~/.dotfiles'
+
+- name: Copy .tmux.config
+  copy: 
+    src: .tmux.conf
+    dest: "{{ lookup('env','HOME') }}/.tmux.conf"
+
+- name: Clone tmux-plugins/tpm repository
+  git:
+    repo: https://github.com/tmux-plugins/tpm
+    dest: "{{ lookup('env','HOME') }}/.tmux/plugins/tpm"
+
+# - name: Clone powerlevel10k
+#   git:
+#     repo: 'https://github.com/romkatv/powerlevel10k.git'
+#     dest: "{{ lookup('env','HOME') }}/.oh-my-zsh/custom/themes/powerlevel10k"
+#     depth: 1
+
+# - name: Clone zsh-autosuggestions
+#   git:
+#     repo: 'https://github.com/zsh-users/zsh-autosuggestions'
+#     dest: "{{ lookup('env','HOME') }}/.oh-my-zsh/custom/plugins/zsh-autosuggestions"
+
+# - name: Clone zsh-syntax-highlighting
+#   git:
+#     repo: 'https://github.com/zsh-users/zsh-syntax-highlighting'
+#     dest: "{{ lookup('env','HOME') }}/.oh-my-zsh/custom/plugins/zsh-syntax-highlighting"
+
+# - name: Clone fast-syntax-highlighting
+#   git:
+#     repo: 'https://github.com/zdharma-continuum/fast-syntax-highlighting.git'
+#     dest: "{{ lookup('env','HOME') }}/.oh-my-zsh/custom/plugins/fast-syntax-highlighting"
+
+# - name: Clone powerlevel10k
+#   git:
+#     repo: 'https://github.com/marlonrichert/zsh-autocomplete.git'
+#     dest: "{{ lookup('env','HOME') }}/.oh-my-zsh/custom/plugins/zsh-autocomplete"
+#     depth: 1

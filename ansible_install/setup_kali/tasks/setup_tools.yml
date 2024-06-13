@@ -1,0 +1,52 @@
+---
+- name: Install gotator
+  shell: go install github.com/Josue87/gotator@latest
+
+- name: Install ffuf
+  apt:
+    name: ffuf
+    state: present
+    update_cache: yes
+
+- name: Clone PenTestical/sqli repository
+  ansible.builtin.git:
+    repo: 'https://github.com/PenTestical/sqli.git'
+    dest: '/tmp/sqli'
+
+- name: Copy files to destination
+  ansible.builtin.copy:
+    src: '/tmp/sqli/main/'
+    dest: '/usr/share/wfuzz/wordlist/Injections/'
+    remote_src: yes
+
+- name: Install seclists and python3-venv
+  ansible.builtin.apt:
+    name: "{{ packages }}"
+    update_cache: yes
+  vars:
+    packages:
+    - seclists
+    - python3-venv
+
+- name: Install pipx
+  ansible.builtin.pip:
+    name: pipx
+    executable: pip3
+
+- name: Ensure pipx path
+  ansible.builtin.command:
+    cmd: python3 -m pipx ensurepath
+
+- name: Install AutoRecon
+  ansible.builtin.command:
+    cmd: pipx install git+https://github.com/Tib3rius/AutoRecon.git
+
+- name: Create alias for autorecon
+  ansible.builtin.lineinfile:
+    path: ~/.bashrc
+    line: 'alias autorecon="sudo $(which autorecon)"'
+    state: present
+
+- name: Install impacket using pipx
+  ansible.builtin.command:
+    cmd: python3 -m pipx install impacket

@@ -1,0 +1,29 @@
+---
+- name: Update apt cache and upgrade all packages
+  apt:
+    update_cache: true
+    upgrade: true
+    autoremove: true
+
+- name: Install packages
+  apt:
+    name: "{{ item }}"
+    state: present
+  loop: "{{ setup_kali_install_packages }}"
+
+- name: Execute a task file
+  include_tasks: "{{ item }}.yml"
+  loop:
+    - setup_firefox
+    - setup_vscode
+    - setup_tools
+
+- name: Set permissions for SSH folder
+  ansible.builtin.file:
+    path: ~/.ssh
+    mode: '0700'
+
+- name: Set permissions for home folder
+  ansible.builtin.file:
+    path: ~
+    mode: '0755'

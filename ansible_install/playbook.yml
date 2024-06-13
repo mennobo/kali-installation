@@ -1,0 +1,11 @@
+---
+- hosts: localhost
+  become: yes
+  roles:
+    - role: setup_kali
+
+- hosts: localhost
+  become_user: kali
+  roles:
+    - role: setup_shell
+   
