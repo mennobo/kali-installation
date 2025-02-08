@@ -15,28 +15,10 @@
     src: 'sqli_wordlist.txt'
     dest: '/usr/share/wfuzz/wordlist/Injections/'
     remote_src: no
-
-- name: Install seclists and python3-venv
-  ansible.builtin.apt:
-    name: "{{ packages }}"
-    update_cache: yes
-  vars:
-    packages:
-    - seclists
-    - python3-venv
-
-- name: Install pipx
-  ansible.builtin.pip:
-    name: pipx
-    executable: pip3
-
-- name: Ensure pipx path
+  
+- name: Install tools using pipx
   ansible.builtin.command:
-    cmd: python3 -m pipx ensurepath
-
-- name: Install AutoRecon
-  ansible.builtin.command:
-    cmd: pipx install git+https://github.com/Tib3rius/AutoRecon.git
+    cmd: pipx install impacket
 
 - name: Create alias for autorecon
   ansible.builtin.lineinfile:
@@ -44,6 +26,60 @@
     line: 'alias autorecon="sudo $(which autorecon)"'
     state: present
 
-- name: Install impacket using pipx
+- name: Clone PowerSploit repository
+  ansible.builtin.git:
+    repo: 'https://github.com/PowerShellMafia/PowerSploit.git'
+    dest: '/opt/PowerSploit'
+
+- name: Create /opt/ligolo-ng directory
+  ansible.builtin.file:
+    path: /opt/ligolo-ng
+    state: directory
+    mode: '0755'
+
+- name: Download ligolo-ng Linux agent
+  ansible.builtin.get_url:
+    url: https://github.com/nicocha30/ligolo-ng/releases/download/v0.4.3/ligolo-ng_agent_0.7.5_Linux_64bit.tar.gz
+    dest: /opt/ligolo-ng/ligolo-ng_agent_0.7.5_Linux_64bit.tar.gz
+
+- name: Download ligolo-ng Linux proxy
+  ansible.builtin.get_url:
+    url: https://github.com/nicocha30/ligolo-ng/releases/download/v0.4.3/ligolo-ng_proxy_0.7.5_Linux_64bit.tar.gz
+    dest: /opt/ligolo-ng/ligolo-ng_proxy_0.7.5_Linux_64bit.tar.gz
+
+- name: Download ligolo-ng Windows agent
+  ansible.builtin.get_url:
+    url: https://github.com/nicocha30/ligolo-ng/releases/download/v0.5.2/ligolo-ng_agent_0.7.5_windows_amd64.zip
+    dest: /opt/ligolo-ng/ligolo-ng_agent_0.7.5_windows_amd64.zip
+
+- name: Extract ligolo-ng Linux agent
+  ansible.builtin.unarchive:
+    src: /opt/ligolo-ng/ligolo-ng_agent_0.7.5_Linux_64bit.tar.gz
+    dest: /opt/ligolo-ng/
+    remote_src: yes
+
+- name: Extract ligolo-ng Linux proxy
+  ansible.builtin.unarchive:
+    src: /opt/ligolo-ng/ligolo-ng_proxy_0.7.5_Linux_64bit.tar.gz
+    dest: /opt/ligolo-ng/
+    remote_src: yes
+
+- name: Extract ligolo-ng Windows agent
+  ansible.builtin.unarchive:
+    src: /opt/ligolo-ng/ligolo-ng_agent_0.7.5_windows_amd64.zip
+    dest: /opt/ligolo-ng/
+    remote_src: yes
+
+- name: Clean up downloaded files
+  ansible.builtin.file:
+    path: /opt/ligolo-ng/
+    state: absent
+    recurse: yes
+    with_items:
+      - /opt/ligolo-ng/ligolo-ng_agent_0.7.5_Linux_64bit.tar.gz
+      - /opt/ligolo-ng/ligolo-ng_proxy_0.7.5_Linux_64bit.tar.gz
+      - /opt/ligolo-ng/ligolo-ng_agent_0.7.5_windows_amd64.zip
+
+- name: Rename extracted files
   ansible.builtin.command:
-    cmd: python3 -m pipx install impacket
+    cmd: mv /opt/ligolo-ng/proxy /opt/ligolo-ng/lin-proxy && mv /opt/ligolo-ng/agent /opt/ligolo-ng/lin-agent
