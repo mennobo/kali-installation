@@ -14,7 +14,6 @@
 - name: Execute a task file
   include_tasks: "{{ item }}.yml"
   loop:
-    - setup_vscode
     - setup_tools
 
 - name: Set permissions for SSH folder
