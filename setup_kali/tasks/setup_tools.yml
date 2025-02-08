@@ -83,3 +83,39 @@
 - name: Rename extracted files
   ansible.builtin.command:
     cmd: mv /opt/ligolo-ng/proxy /opt/ligolo-ng/lin-proxy && mv /opt/ligolo-ng/agent /opt/ligolo-ng/lin-agent
+
+- name: Clone Ghostpack-CompiledBinaries repository
+  ansible.builtin.git:
+    repo: 'https://github.com/r3motecontrol/Ghostpack-CompiledBinaries.git'
+    dest: '/opt/Ghostpack-CompiledBinaries'
+
+- name: Clone Nishang repository
+  ansible.builtin.git:
+    repo: 'https://github.com/samratashok/nishang.git'
+    dest: '/opt/nishang'
+
+- name: Clone Mimikatz repository
+  ansible.builtin.git:
+    repo: 'https://github.com/ParrotSec/mimikatz.git'
+    dest: '/opt/mimikatz'
+
+- name: Clone JAWS repository
+  ansible.builtin.git:
+    repo: 'https://github.com/411Hall/JAWS.git'
+    dest: '/opt/JAWS'
+
+- name: Install BloodHound using pip
+  ansible.builtin.pip:
+    name: bloodhound
+    state: present
+
+- name: Download winPEASany.exe
+  ansible.builtin.get_url:
+    url: https://github.com/peass-ng/PEASS-ng/releases/download/20250202-a3a1123d/winPEASany.exe
+    dest: /opt/winPEASany.exe
+
+- name: Download linpeas.sh
+  ansible.builtin.get_url:
+    url: https://github.com/peass-ng/PEASS-ng/releases/download/20250202-a3a1123d/linpeas.sh
+    dest: /opt/linpeas.sh
+    mode: '0755'
