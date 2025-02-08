@@ -29,36 +29,10 @@
     shell: /bin/zsh
   become: true
 
-- name: Clone the repository
-  ansible.builtin.git:
-    repo: 'https://github.com/caarlos0/dotfiles.zsh.git'
-    dest: '{{ ansible_env.HOME }}/.dotfiles'
-  become: false
-    
-- name: Ensure bootstrap script is executable
-  ansible.builtin.file:
-    path: '{{ ansible_env.HOME }}/.dotfiles/script/bootstrap'
-    mode: '0755'
-  become: false
-
-- name: Run the bootstrap script with expect
-  ansible.builtin.shell: |
-    /usr/bin/expect -c '
-    spawn ./script/bootstrap
-    expect "What is your github author name?"
-    send "mennobo\r"
-    expect "What is your github author email?"
-    send "mbezema@pm.me\r"
-    interact
-    '
-  args:
-    chdir: '{{ ansible_env.HOME }}/.dotfiles'
-  become: false
-
 - name: Copy config.zsh
   copy: 
-    src: config.zsh
-    dest: "/home/kali/.dotfiles/zsh/config.zsh"
+    src: .zshrc
+    dest: "/home/kali/.zshrc"
   become: false
 
 - name: Copy .tmux.config
