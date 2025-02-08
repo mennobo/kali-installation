@@ -39,30 +39,53 @@
 
 - name: Download ligolo-ng Linux agent
   ansible.builtin.get_url:
-    url: https://github.com/nicocha30/ligolo-ng/releases/download/v0.4.3/ligolo-ng_agent_0.7.5_Linux_64bit.tar.gz
-    dest: /opt/ligolo-ng/ligolo-ng_agent_0.7.5_Linux_64bit.tar.gz
+    url: https://github.com/nicocha30/ligolo-ng/releases/download/v0.7.5/ligolo-ng_agent_0.7.5_Linux_amd64.tar.gz
+    dest: /opt/ligolo-ng/ligolo-ng_agent_0.7.5_Linux_arm64.tar.gz
+
+- name: Download ligolo-ng Linux agent
+  ansible.builtin.get_url:
+    url: https://github.com/nicocha30/ligolo-ng/releases/download/v0.7.5/ligolo-ng_agent_0.7.5_Linux_amd64.tar.gz
+    dest: /opt/ligolo-ng/ligolo-ng_agent_0.7.5_Linux_amd64.tar.gz
 
 - name: Download ligolo-ng Linux proxy
   ansible.builtin.get_url:
-    url: https://github.com/nicocha30/ligolo-ng/releases/download/v0.4.3/ligolo-ng_proxy_0.7.5_Linux_64bit.tar.gz
-    dest: /opt/ligolo-ng/ligolo-ng_proxy_0.7.5_Linux_64bit.tar.gz
+    url: https://github.com/nicocha30/ligolo-ng/releases/download/v0.7.5/ligolo-ng_proxy_0.7.5_Linux_arm64.tar.gz
+    dest: /opt/ligolo-ng/ligolo-ng_proxy_0.7.5_Linux_arm64.tar.gz
 
 - name: Download ligolo-ng Windows agent
   ansible.builtin.get_url:
-    url: https://github.com/nicocha30/ligolo-ng/releases/download/v0.5.2/ligolo-ng_agent_0.7.5_windows_amd64.zip
+    url: https://github.com/nicocha30/ligolo-ng/releases/download/v0.7.5/ligolo-ng_agent_0.7.5_windows_amd64.zip
     dest: /opt/ligolo-ng/ligolo-ng_agent_0.7.5_windows_amd64.zip
+
+- name: Extract ligolo-ng Linux agent amd
+  ansible.builtin.unarchive:
+    src: /opt/ligolo-ng/ligolo-ng_agent_0.7.5_Linux_amd64.tar.gz
+    dest: /opt/ligolo-ng/
+    remote_src: yes
+
+- name: Rename extracted files
+  ansible.builtin.command:
+    cmd: mv /opt/ligolo-ng/agent /opt/ligolo-ng/lin-agent-amd64 
 
 - name: Extract ligolo-ng Linux agent
   ansible.builtin.unarchive:
-    src: /opt/ligolo-ng/ligolo-ng_agent_0.7.5_Linux_64bit.tar.gz
+    src: /opt/ligolo-ng/ligolo-ng_agent_0.7.5_Linux_arm64.tar.gz
     dest: /opt/ligolo-ng/
     remote_src: yes
 
+- name: Rename extracted files
+  ansible.builtin.command:
+    cmd: mv /opt/ligolo-ng/agent /opt/ligolo-ng/lin-agent-arm64
+
 - name: Extract ligolo-ng Linux proxy
   ansible.builtin.unarchive:
-    src: /opt/ligolo-ng/ligolo-ng_proxy_0.7.5_Linux_64bit.tar.gz
+    src: /opt/ligolo-ng/ligolo-ng_proxy_0.7.5_Linux_arm64.tar.gz
     dest: /opt/ligolo-ng/
     remote_src: yes
+
+- name: Rename extracted files
+  ansible.builtin.command:
+    cmd: mv /opt/ligolo-ng/proxy /opt/ligolo-ng/lin-proxy-arm64
 
 - name: Extract ligolo-ng Windows agent
   ansible.builtin.unarchive:
@@ -72,17 +95,13 @@
 
 - name: Clean up downloaded files
   ansible.builtin.file:
-    path: /opt/ligolo-ng/
+    path: "{{ item }}"
     state: absent
-    recurse: yes
-    with_items:
-      - /opt/ligolo-ng/ligolo-ng_agent_0.7.5_Linux_64bit.tar.gz
-      - /opt/ligolo-ng/ligolo-ng_proxy_0.7.5_Linux_64bit.tar.gz
-      - /opt/ligolo-ng/ligolo-ng_agent_0.7.5_windows_amd64.zip
-
-- name: Rename extracted files
-  ansible.builtin.command:
-    cmd: mv /opt/ligolo-ng/proxy /opt/ligolo-ng/lin-proxy && mv /opt/ligolo-ng/agent /opt/ligolo-ng/lin-agent
+  with_items:
+    - /opt/ligolo-ng/ligolo-ng_agent_0.7.5_Linux_amd64.tar.gz
+    - /opt/ligolo-ng/ligolo-ng_agent_0.7.5_Linux_arm64.tar.gz
+    - /opt/ligolo-ng/ligolo-ng_proxy_0.7.5_Linux_arm64.tar.gz
+    - /opt/ligolo-ng/ligolo-ng_agent_0.7.5_windows_amd64.zip
 
 - name: Clone Ghostpack-CompiledBinaries repository
   ansible.builtin.git:
@@ -103,11 +122,6 @@
   ansible.builtin.git:
     repo: 'https://github.com/411Hall/JAWS.git'
     dest: '/opt/JAWS'
-
-- name: Install BloodHound using pip
-  ansible.builtin.pip:
-    name: bloodhound
-    state: present
 
 - name: Download winPEASany.exe
   ansible.builtin.get_url:
