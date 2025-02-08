@@ -5,6 +5,5 @@ setup_kali_install_packages:
   - curl
   - tmux
   - xsel
-
-setup_kali_my_password: "yard-early-roaming"
-setup_kali_root_password: "compile-hybrid-sanctity"
+  - python3-pip
+  - python3-venv
