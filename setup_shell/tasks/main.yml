@@ -35,9 +35,12 @@
     dest: "/home/kali/.zshrc"
   become: false
 
-- name: Copy .tmux.config
+- name: Gather facts
+  ansible.builtin.setup:
+
+- name: Copy .tmux.config based on architecture
   copy: 
-    src: .tmux.conf
+    src: "{{ 'tmux.conf.win' if ansible_facts['architecture'] == 'x86_64' else 'tmux.conf.mac' }}"
     dest: "{{ lookup('env','HOME') }}/.tmux.conf"
   become: false
 
